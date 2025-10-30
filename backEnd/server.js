@@ -25,7 +25,16 @@ const cardSchema = new mongoose.Schema({
     cardBalance: {type: Number, default: 0}
 })
 
+const transactionSchema = new mongoose.Schema({
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    sourceCard: {type: mongoose.Schema.Types.ObjectId, ref: 'Card', required: true},
+    destinationCard: {type: mongoose.Schema.Types.ObjectId, ref: 'Card', required: true},
+    amount: {type: Number, required: true},
+    timestamp: {type: Date, default: Date.now()}
+})
+
 const Card = mongoose.model('Card', cardSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
 function authenticateToken(req, res, next){
     const authHeader = req.headers['authorization'];
@@ -65,7 +74,7 @@ app.get('/view/:cardNumber', authenticateToken, async (req, res) => {
         }
     }
     catch (error){
-        return res.status(500).json({Message: "Server error", error});
+        return res.status(500).json({Message: "Server error: ", error});
     }
 })
 
@@ -83,7 +92,24 @@ app.get('/view/cards', authenticateToken, async (req, res) => {
         }
     }
     catch (error){
-        return res.status(500).json({Message: "Server error", error});
+        return res.status(500).json({Message: "Server error: ", error});
+    }
+})
+
+// Read Transaction Logs
+app.get('/transaction', authenticateToken, async(req, res) => {
+    const userId = req.user.userId;
+
+    try{
+        const history = await Transaction.findOne({user: userId})
+        .populate('sourceCard', 'cardNumber')
+        .populate('destinationCard', 'cardNumber')
+        .sort({timestamp: -1})
+
+        return res.json(history);
+    }
+    catch(error){
+        return res.status(500).json({Message: "Server error: ", error});
     }
 })
 
@@ -132,7 +158,7 @@ app.put('/updateCard/:cardNumber', authenticateToken, async (req, res) => {
         }
     }
     catch(error){
-        return res.status(500).json({Message: "Server error", error});
+        return res.status(500).json({Message: "Server error: ", error});
     }
 })
 
@@ -155,6 +181,50 @@ app.delete('/deleteCard/:cardNumber', authenticateToken, async (req, res) => {
         }
     }
     catch(error){
-        return res.status(500).json({Message: "Server error", error})
+        return res.status(500).json({Message: "Server error: ", error})
     }
 })
+
+app.post('/transfer/source/:cardNumber', authenticateToken, async (req, res) => {
+    const userId = req.user.userId;
+    const {cardNumber} = req.params;
+    const {destinationCard, amount} = req.body;
+
+    try{
+        const cardSource = await Card.findOne({cardNumber});
+        const cardDestination = await Card.findOne({cardNumber: destinationCard});
+
+        if(!cardSource || !cardDestination){
+            return res.status(404).json({Message: "One or both cards not found"});
+        }
+
+        else if(cardSource.user.toString() !== userId){
+            return res.status(403).json({Message: "Card is enrolled to other users"});
+        }
+
+        else if(cardSource.cardBalance < amount){
+            return res.status(400).json({Message: "Insufficient funds"});
+        }
+
+        else{
+            cardSource.cardBalance -= amount;
+            cardDestination.cardBalance += amount;
+
+            await cardSource.save();
+            await cardDestination.save();
+            
+            await Transaction.create({
+                user: userId,
+                sourceCard: cardSource._id,
+                destinationCard: cardDestination._id,
+                amount: amount
+            })
+
+            return res.json({Message: "Transfer successful"});
+        }
+    }
+    catch(error){
+        return res.status(500).json({Message: "Server error: ", error});
+    }
+})
+
