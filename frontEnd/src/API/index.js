@@ -33,15 +33,13 @@ export const handleReadTotalBalance = (setVarName) => {
     .catch(err => {console.log(err)})
 }
 
-export const handleEnrollCard = (e, values, nav) => {
-    e.preventDefault();
+export const handleEnrollCard = (values, nav) => {
     axios.post('http://localhost:5000/enrollCard', values, {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
     .then(res => {console.log(res); nav('/home')})
     .catch(err => {console.log(err)})
 }
 
-export const handleUpdateCard = (e, id, values, nav) => {
-    e.preventDefault();
+export const handleUpdateCard = (id, values, nav) => {
     axios.put('http://localhost:5000/updateCard/'+id, values, {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
     .then(res => {console.log(res); nav('/home')})
     .catch(err => {console.log(err)})
