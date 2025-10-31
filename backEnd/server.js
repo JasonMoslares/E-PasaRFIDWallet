@@ -104,10 +104,6 @@ app.get('/transactions', authenticateToken, async(req, res) => {
 
     try{
         const history = await Transaction.find({user: userId})
-        .populate('sourceCard', 'cardNumber')
-        .populate('sourceCardName', 'nickName')
-        .populate('destinationCard', 'cardNumber')
-        .populate('destinationCardName', 'cardNumber')
         .sort({timestamp: -1})
 
         return res.json(history);
