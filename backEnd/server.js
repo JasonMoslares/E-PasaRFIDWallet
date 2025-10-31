@@ -27,8 +27,10 @@ const cardSchema = new mongoose.Schema({
 
 const transactionSchema = new mongoose.Schema({
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    sourceCard: {type: mongoose.Schema.Types.ObjectId, ref: 'Card', required: true},
-    destinationCard: {type: mongoose.Schema.Types.ObjectId, ref: 'Card', required: true},
+    sourceCard: {type: String, required: true},
+    sourceCardName: {type: String, required: true},
+    destinationCard: {type: String, required: true},
+    destinationCardName: {type: String, required: true},
     amount: {type: Number, required: true},
     timestamp: {type: Date, default: Date.now()}
 })
@@ -103,7 +105,9 @@ app.get('/transactions', authenticateToken, async(req, res) => {
     try{
         const history = await Transaction.find({user: userId})
         .populate('sourceCard', 'cardNumber')
+        .populate('sourceCardName', 'nickName')
         .populate('destinationCard', 'cardNumber')
+        .populate('destinationCardName', 'cardNumber')
         .sort({timestamp: -1})
 
         return res.json(history);
@@ -219,9 +223,12 @@ app.post('/transfer/source/:cardNumber', authenticateToken, async (req, res) => 
             
             await Transaction.create({
                 user: userId,
-                sourceCard: cardSource._id,
-                destinationCard: cardDestination._id,
-                amount: amount
+                sourceCard: cardSource.cardNumber,
+                sourceCardName: cardSource.nickName,
+                destinationCard: cardDestination.cardNumber,
+                destinationCardName: cardDestination.nickName,
+                amount: amount,
+                timestamp: Date.now()
             })
 
             return res.json({Message: "Transfer successful"});
