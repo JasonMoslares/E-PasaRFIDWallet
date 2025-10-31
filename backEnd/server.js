@@ -189,14 +189,13 @@ app.delete('/deleteCard/:cardNumber', authenticateToken, async (req, res) => {
 })
 
 // Transfer Balance
-app.post('/transfer/source/:cardNumber', authenticateToken, async (req, res) => {
+app.post('/transfer/source/', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
-    const {cardNumber} = req.params;
-    const {destinationCard, amount} = req.body;
+    const {sourceCard, destinationCard, amount} = req.body;
 
     try{
-        const cardSource = await Card.findOne({cardNumber});
-        const cardDestination = await Card.findOne({cardNumber: destinationCard});
+        const cardSource = await Card.findOne({sourceCard});
+        const cardDestination = await Card.findOne({destinationCard});
 
         if(!cardSource || !cardDestination){
             return res.status(404).json({Message: "One or both cards not found"});
