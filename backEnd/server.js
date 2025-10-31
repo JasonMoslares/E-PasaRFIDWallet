@@ -189,7 +189,7 @@ app.delete('/deleteCard/:cardNumber', authenticateToken, async (req, res) => {
 })
 
 // Transfer Balance
-app.post('/transfer/source/', authenticateToken, async (req, res) => {
+app.post('/transfer', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
     const {sourceCard, destinationCard, amount} = req.body;
 
