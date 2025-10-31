@@ -51,8 +51,8 @@ export const handleDeleteCard = (id, nav) => {
     .catch(err => {console.log(err)})
 }
 
-export const handleTransfer = (id, values, nav) => {
-    axios.post('http://localhost:5000/transfer/source/'+id, values, {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
+export const handleTransfer = (values, nav) => {
+    axios.post('http://localhost:5000/transfer', values, {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
     .then(res => {console.log(res); nav('/home')})
     .catch(err => {console.log(err)})
 }
