@@ -56,7 +56,7 @@ function authenticateToken(req, res, next){
 // Read Single Card
 app.get('/view/:cardNumber', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
-    const cardNumber = req.params;
+    const {cardNumber} = req.params;
 
     try{
         const readCard = await Card.findOne({cardNumber});
@@ -97,11 +97,11 @@ app.get('/view/cards', authenticateToken, async (req, res) => {
 })
 
 // Read Transaction Logs
-app.get('/transaction', authenticateToken, async(req, res) => {
+app.get('/transactions', authenticateToken, async(req, res) => {
     const userId = req.user.userId;
 
     try{
-        const history = await Transaction.findOne({user: userId})
+        const history = await Transaction.find({user: userId})
         .populate('sourceCard', 'cardNumber')
         .populate('destinationCard', 'cardNumber')
         .sort({timestamp: -1})
@@ -116,7 +116,7 @@ app.get('/transaction', authenticateToken, async(req, res) => {
 // Create / Enroll Card
 app.post('/enrollCard', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
-    const {cardType, cardNumber} = req.body;
+    const {rfidType, cardNumber} = req.body;
     
     const cardExists = await Card.findOne({cardNumber});
     if(cardExists){
@@ -131,9 +131,12 @@ app.post('/enrollCard', authenticateToken, async (req, res) => {
     else{
         const newCard = await Card.create({
             user: userId,
-            cardType: cardType,
+            rfidType: rfidType,
+            nickName: nickName,
             cardNumber: cardNumber
         })
+
+        return res.json({Message: "Card Enrolled Successfully", newCard})
     }
 })
 
@@ -141,7 +144,7 @@ app.post('/enrollCard', authenticateToken, async (req, res) => {
 app.put('/updateCard/:cardNumber', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
     const {cardNumber} = req.params;
-    const nickName = req.body;
+    const {nickName} = req.body;
 
     try{
         const card = await Card.findOne({cardNumber});
@@ -185,6 +188,7 @@ app.delete('/deleteCard/:cardNumber', authenticateToken, async (req, res) => {
     }
 })
 
+// Transfer Balance
 app.post('/transfer/source/:cardNumber', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
     const {cardNumber} = req.params;
@@ -222,6 +226,23 @@ app.post('/transfer/source/:cardNumber', authenticateToken, async (req, res) => 
 
             return res.json({Message: "Transfer successful"});
         }
+    }
+    catch(error){
+        return res.status(500).json({Message: "Server error: ", error});
+    }
+})
+
+// Read Total Balance
+app.get('/home', authenticateToken, async (req, res) => {
+    const userId = req.user.userId;
+    
+    try{
+        const cards = await Card.find({user: userId});
+
+        let totalBalance = cards.reduce((acc, card) => acc + card.cardBalance, 0);
+
+        return res.json(totalBalance);
+        
     }
     catch(error){
         return res.status(500).json({Message: "Server error: ", error});
