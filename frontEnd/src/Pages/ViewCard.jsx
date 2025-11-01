@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
-import {Table} from 'antd'
+import {Card, Table} from 'antd'
 import { handleCardTransactionLogs, handleReadSingleCard } from "../API"
 
 const ViewCard = () => {

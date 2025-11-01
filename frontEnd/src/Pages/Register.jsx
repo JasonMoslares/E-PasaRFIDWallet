@@ -1,3 +1,4 @@
+import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {Card, Form, Input} from 'antd'
 import { handleRegister } from "../API";
@@ -34,7 +35,7 @@ const Register = () => {
                         <Form.Item label='Email'
                                     name='email'
                                     rules={[{required: true, message: "Email Address is Required"},
-                                            {type: email, message: "Enter a valid Email Address"}
+                                            {type: 'email', message: "Enter a valid Email Address"}
                                     ]}>
                             <Input placeholder="Enter your email address"
                                     value={values.email}

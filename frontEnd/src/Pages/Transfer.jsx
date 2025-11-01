@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, Form, Select } from 'antd'
+import { Card, Input, Form, Select } from 'antd'
 import { handleReadAll, handleTransfer } from "../API";
 
 const Transfer = () => {

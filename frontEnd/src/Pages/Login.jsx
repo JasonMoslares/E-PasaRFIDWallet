@@ -1,3 +1,4 @@
+import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {Card, Form, Input} from 'antd'
 import { handleLogin } from "../API"
@@ -26,7 +27,7 @@ const Login = () => {
                         <Form.Item label='email' 
                                     name='email' 
                                     rules={[{required: true, message: 'Email Address is Required'},
-                                            {type: email, message: 'Enter a valid Email Address'}
+                                            {type: 'email', message: 'Enter a valid Email Address'}
                                     ]}>
                             <Input placeholder='Enter your email'
                                     value={values.email}
