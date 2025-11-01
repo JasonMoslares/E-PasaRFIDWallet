@@ -12,7 +12,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
 
 mongoose.connect(MONGO_URL)
@@ -109,3 +108,7 @@ app.delete('/logout', async(req, res) => {
 function generateAccessToken(user){
     return jwt.sign({userId: user._id, email: user.email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '10m'});
 }
+
+app.listen(4000, () => {
+    console.log("AuthServer is running");
+})

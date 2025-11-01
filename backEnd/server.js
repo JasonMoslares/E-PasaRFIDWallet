@@ -10,7 +10,6 @@ dotenv.config();
 app.use(cors());
 app.use(express.json())
 
-const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
 
 mongoose.connect(MONGO_URL)
@@ -76,6 +75,22 @@ app.get('/view/:cardNumber', authenticateToken, async (req, res) => {
         }
     }
     catch (error){
+        return res.status(500).json({Message: "Server error: ", error});
+    }
+})
+
+// Read Transaction History of a Card
+app.get('/view/:cardNumber', authenticateToken, async(req, res) => {
+    const userId = req.user.userId;
+    const {cardNumber} = req.params;
+
+    try{
+        const cardHistory = await Transaction.find({cardNumber})
+        .sort({timestamp: -1});
+
+        return res.json(cardHistory);
+    }
+    catch(error){
         return res.status(500).json({Message: "Server error: ", error});
     }
 })
@@ -249,5 +264,9 @@ app.get('/home', authenticateToken, async (req, res) => {
     catch(error){
         return res.status(500).json({Message: "Server error: ", error});
     }
+})
+
+app.listen(5000, () => {
+    console.log("Server is running");
 })
 
