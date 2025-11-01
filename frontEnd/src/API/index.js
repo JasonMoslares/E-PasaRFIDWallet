@@ -62,3 +62,9 @@ export const handleTransactionLogs = (setVarName) => {
     .then(res => {console.log(res); setVarName(res.data)})
     .catch(err => {console.log(err)})
 }
+
+export const handleCardTransactionLogs = (id, setVarName) => {
+    axios.get('http://localhost:5000/view/'+id, {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
+    .then(res => {console.log(res); setVarName(res.data)})
+    .catch(err => {console.log(err)})
+}
