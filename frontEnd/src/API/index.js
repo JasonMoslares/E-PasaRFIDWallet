@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 export const handleLogin = (values, nav) => {
-    axios.post('http://localhost:5000/login', values)
+    axios.post('http://localhost:4000/login', values)
     .then(res => {console.log(res); localStorage.setItem('token', res.data.token); nav('/home')})
     .catch(err => {console.log(err)})
 }
 
 export const handleRegister = (values, nav) => {
-    axios.post('http://localhost:5000/register', values)
+    axios.post('http://localhost:4000/register', values)
     .then(res => {console.log(res); nav('/')})
     .catch(err => {console.log(err)})
 }
