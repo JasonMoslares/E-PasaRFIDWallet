@@ -63,8 +63,13 @@ app.post('/login', async (req, res) => {
             const accessToken = generateAccessToken(user);
             const refreshToken = jwt.sign({email: user.email}, process.env.REFRESH_TOKEN_SECRET);
             user.refreshToken = refreshToken;
-            user.save();
-            return res.status(200).json({Message: "Login successful"});
+            await user.save();
+            return res.status(200).json({Message: "Login successful", 
+                                        user: {name: user.name,
+                                                email: user.email,
+                                                _id: user._id},
+                                        accessToken,
+                                        refreshToken });
         }
         else{
             return res.status(403).json({Message: "Invalid credentials"});
@@ -102,7 +107,13 @@ app.delete('/logout', async(req, res) => {
     }
 
     await User.updateOne({refreshToken}, {$unset:{refreshToken:""}});
-    return res.status(204).json({Message: "Logout successful"});
+
+    if (result.modifiedCount === 0) {
+        return res.status(404).json({ Message: "Token not found or already logged out" });
+    }
+
+
+    return res.status(200).json({Message: "Logout successful"});
 })
 
 function generateAccessToken(user){
