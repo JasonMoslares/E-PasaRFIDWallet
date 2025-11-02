@@ -2,13 +2,27 @@ import axios from 'axios'
 
 export const handleLogin = (values, nav) => {
     axios.post('http://localhost:4000/login', values)
-    .then(res => {console.log(res); localStorage.setItem('token', res.data.token); nav('/home')})
+    .then(res => {console.log(res); 
+                localStorage.setItem('accessToken', res.data.accessToken);
+                localStorage.setItem('refreshToken', res.data.refreshToken);
+                localStorage.setItem('user', JSON.stringify(res.data.user)); 
+                nav('/home')})
     .catch(err => {console.log(err)})
 }
 
 export const handleRegister = (values, nav) => {
     axios.post('http://localhost:4000/register', values)
     .then(res => {console.log(res); nav('/')})
+    .catch(err => {console.log(err)})
+}
+
+export const handleLogout = (nav) => {
+    axios.delete('http://localhost:4000/logout', {data: {token: refreshToken}})
+    .then(res => {console.log(res);
+                localStorage.removeItem('accessToken')
+                localStorage.removeItem('refreshToken')
+                localStorage.removeItem('user');
+                nav('/')})
     .catch(err => {console.log(err)})
 }
 
