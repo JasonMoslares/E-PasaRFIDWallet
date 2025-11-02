@@ -266,6 +266,14 @@ app.get('/home', authenticateToken, async (req, res) => {
     }
 })
 
+app.delete('/logout', authenticateToken, async(req, res) => {
+    const userId = req.user.userId;
+
+    await User.updateOne({_id: userId}, {$unset:{refreshToken:""}});
+
+    return res.status(200).json({Message: "Logout successful"});
+})
+
 app.listen(5000, () => {
     console.log("Server is running");
 })
