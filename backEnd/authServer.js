@@ -81,37 +81,32 @@ app.post('/login', async (req, res) => {
 })
 
 app.post('/token', async(req, res) => {
-    const refreshToken = req.body.token;
+    const refreshToken = req.headers['x-refresh-token'];
     if(!refreshToken){
         return res.status(403).json({Message: "Token is missing"});
     }
 
-    const tokenExist = User.findOne({refreshToken});
+    const tokenExist = await User.findOne({refreshToken});
     if(!tokenExist){
-        return res.status(403).json({Message: "Token is missing"});
+        return res.status(403).json({Message: "Invalid refresh token"});
     }
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
         if(err){
-            return res.status(500).json({Message: "Server error"})
+            return res.status(403).json({Message: "Invalid refresh token"})
         }
         const accessToken = generateAccessToken({email: decoded.email});
-        return res.status(200).json({Message: "Token Refreshed"})
+        return res.status(200).json({ accessToken });
     })
 })
 
 app.delete('/logout', async(req, res) => {
-    const refreshToken = req.body.token;
+    const refreshToken = req.headers['x-refresh-token'];
     if(!refreshToken){
         return res.status(403).json({Message: "Token is missing"});
     }
 
     await User.updateOne({refreshToken}, {$unset:{refreshToken:""}});
-
-    if (result.modifiedCount === 0) {
-        return res.status(404).json({ Message: "Token not found or already logged out" });
-    }
-
 
     return res.status(200).json({Message: "Logout successful"});
 })
