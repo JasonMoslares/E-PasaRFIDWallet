@@ -15,7 +15,7 @@ const Header = () => {
         headerRightContent = (
             <>
                 <span>Hi, {user.name}</span>
-                <button type='button' className='logOutButton' onCLick={handleLogOut}>Log Out</button>
+                <button type='button' className='logOutButton' onClick={handleLogOut}>Log Out</button>
             </>
         )
     }
