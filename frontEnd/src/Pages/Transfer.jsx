@@ -63,7 +63,7 @@ const Transfer = () => {
                                     rules={[{required: true, message: "Please select the destination card"}]}>
                             <Select showSearch
                                     placeholder="Select or type a card"
-                                    value={values.cardDestination}
+                                    value={values.destinationCard}
                                     onChange={(value) => setValues({...values, destinationCard: value})}
                                     onSearch={(value) => setValues({...values, destinationCard: value})}
                                     filterOption={(input, option) => 
@@ -88,7 +88,7 @@ const Transfer = () => {
                                     onChange={(e) => setValues({...values, amount: e.target.value})} />
                         </Form.Item>
 
-                        <button type='button' className='transferButton' onClick={handleTransfer}>Transfer</button>
+                        <button type='button' className='transferButton' onClick={submitTransfer}>Transfer</button>
                         <button type='button' className='cancelButton' onClick={cancelTransfer}>Cancel</button>
                     </Form>
                 </div>
