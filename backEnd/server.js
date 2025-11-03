@@ -209,8 +209,8 @@ app.post('/transfer', authenticateToken, async (req, res) => {
     const {sourceCard, destinationCard, amount} = req.body;
 
     try{
-        const cardSource = await Card.findOne({sourceCard});
-        const cardDestination = await Card.findOne({destinationCard});
+        const cardSource = await Card.findOne({cardNumber: sourceCard});
+        const cardDestination = await Card.findOne({cardNumber: destinationCard});
 
         if(!cardSource || !cardDestination){
             return res.status(404).json({Message: "One or both cards not found"});
@@ -267,9 +267,13 @@ app.get('/home', authenticateToken, async (req, res) => {
 })
 
 app.delete('/logout', authenticateToken, async(req, res) => {
-    const userId = req.user.userId;
+    const refreshToken = req.headers['x-refresh-token'];
+    
+    if(!refreshToken){
+        return res.status(403).json({Message: "Token is missing"});
+    }
 
-    await User.updateOne({_id: userId}, {$unset:{refreshToken:""}});
+    await User.updateOne({refreshToken}, {$unset:{refreshToken:""}});
 
     return res.status(200).json({Message: "Logout successful"});
 })
