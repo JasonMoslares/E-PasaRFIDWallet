@@ -1,4 +1,4 @@
-import {Route, Router, Routes} from 'react-router-dom'
+import {Route, Routes} from 'react-router-dom'
 import Login from '../../Pages/Login';
 import Register from '../../Pages/Register';
 import Home from '../../Pages/Home';
@@ -13,7 +13,7 @@ import Header from '../Header/Header';
 
 function AppRoutes(){
     return(
-        <Router>
+        <>
             <Header />
             <Routes>
                 <Route path="/" element={<Login />}></Route>
@@ -26,7 +26,7 @@ function AppRoutes(){
                 <Route path="/updateCard/:cardNumber" element={<UpdateCard />}></Route>
                 <Route path="/transactions" element={<TransactionLogs />}></Route>
             </Routes>
-        </Router>
+        </>
     );
 }
 
