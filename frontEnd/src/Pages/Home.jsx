@@ -11,7 +11,7 @@ const Home = () => {
         handleReadTotalBalance(setBalance);
 
         const interval = setInterval(() => {
-            handleReadTotalBalance(balance);
+            handleReadTotalBalance(setBalance);
         }, 2000)
 
         return () => clearInterval(interval);
@@ -40,7 +40,7 @@ const Home = () => {
                         <Link to='/enrollCard'>Enroll Card</Link>
                     </Card>
                     <Card>
-                        <Link to='/transfer/source/:cardNumber'>Transfer Funds</Link>
+                        <Link to='/transfer/'>Transfer Funds</Link>
                     </Card>
                     <Card>
                         <Link to ='/view/cards'>Cards</Link>
