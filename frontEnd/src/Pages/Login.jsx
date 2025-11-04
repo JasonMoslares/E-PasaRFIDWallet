@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {Card, Form, Input} from 'antd'
 import { handleLogin } from "../API"
+import "../index.css"
 
 const Login = () => {
 
@@ -24,7 +25,7 @@ const Login = () => {
                         <div className="login-form-title">
                             <h2>Log In</h2>
                         </div>
-                        <Form.Item label='email' 
+                        <Form.Item label='E-mail' 
                                     name='email' 
                                     rules={[{required: true, message: 'Email Address is Required'},
                                             {type: 'email', message: 'Enter a valid Email Address'}
@@ -34,7 +35,7 @@ const Login = () => {
                                     onChange={(e) => setValues({...values, email: e.target.value})}/>
                         </Form.Item>
 
-                        <Form.Item label='password' name='password' rules={[{required: true, message: 'Please enter your password'}]}>
+                        <Form.Item label='Password' name='password' rules={[{required: true, message: 'Please enter your password'}]}>
                             <Input.Password placeholder='Enter your password' visibilityToggle={true} 
                                             value = {values.password}
                                             onChange={(e) => setValues({...values, password: e.target.value})}/>
