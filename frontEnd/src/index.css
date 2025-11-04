@@ -1,13 +1,177 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+header{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: orange;
+  padding: 25px 25px;
+  color: white;
+  border-bottom: 3px solid #e67c00;
+  position: relative;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.header-title{
+  position: absolute;
+  left: 50%;
+}
+
+.header-title h2{
+  margin: px;
+}
+
+.header-right-content{
+  display: flex;
+  align-items: center;
+  font-family: Cambria;
+  gap: 18px;
+}
+
+.header-right-content a{
+  color: white;
+  text-decoration: none;
+}
+
+.header-right-content a:hover{
+  text-decoration: underline;
+}
+
+.form-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: -25px;
+  border-radius: 0;
+  background-color: #ffe9c9;
+}
+
+.login-form-container, .register-form-container, .card-form-container, .update-card-form-container, .transfer-form-container{
+  width: 100%;
+  max-width: 420px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px 15px;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.login-form-title, .register-form-title, .card-form-title, .update-card-form-title, .transfer-form-title{
+  background-color: orange;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  padding: 5px 0;
+  margin: -20px -15px 20px -15px;
+}
+
+.login-form-title h2, .register-form-title h2, .card-form-title h2, .update-card-form-title h2, .transfer-form-title h2{
+  margin: 5px;
+  color: white;
+}
+
+.loginButton, .registerButton{
+  width: 50%;
+  padding: 10px 0;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  background-color: orange;
+  cursor: pointer;
+  margin: auto;
+  display: block;
+  transition: transform 0.15s ease;
+}
+
+.loginButton:active, .registerButton:active{
+  transform: scale(0.9);
+}
+
+.logOutButton{
+  font-family: Cambria;
+  font-size: 15px;
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 3px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.logOutButton:hover{
+  background-color: #e67c00;
+}
+
+.balance-space{
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.balance-card{
+  background-color: #ff7000;
+  color: white;
+  width: 400px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.3);
+}
+
+.balance-title h1{
+  font-size: 25px;
+}
+
+.balance-section h2{
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.functionalities-space{
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 0;
+}
+
+.function-card{
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  width: 140px;
+}
+
+.icon-tile{
+  background-color: white;
+  width: 100%;
+  border: 2px solid orange;
+  border-radius: 12px;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.function-icon {
+  width: 36px;
+  height: 36px;
+  color: orange;
+  transition: 0.25s;
+}
+
+.function-label {
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: orange;
+  transition: 0.25s;
+}
+
+.icon-tile:hover .function-icon, .icon-tile:hover .function-label{
+  color: white;
+}
+
+.icon-tile:hover{
+  background-color: orange;
 }
