@@ -86,8 +86,8 @@ app.post('/token', async(req, res) => {
         return res.status(403).json({Message: "Token is missing"});
     }
 
-    const tokenExist = await User.findOne({refreshToken});
-    if(!tokenExist){
+    const user = await User.findOne({refreshToken});
+    if(!user){
         return res.status(403).json({Message: "Invalid refresh token"});
     }
 
@@ -95,7 +95,7 @@ app.post('/token', async(req, res) => {
         if(err){
             return res.status(403).json({Message: "Invalid refresh token"})
         }
-        const accessToken = generateAccessToken({email: decoded.email});
+        const accessToken = generateAccessToken(user);
         return res.status(200).json({ accessToken });
     })
 })
