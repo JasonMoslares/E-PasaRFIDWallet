@@ -29,6 +29,7 @@ const Transfer = () => {
 
     const submitTransfer = () => {
         handleTransfer(values, setValues);
+        navigate('/home');
     }
 
     return(
