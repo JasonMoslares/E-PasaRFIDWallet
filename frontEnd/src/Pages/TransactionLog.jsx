@@ -66,7 +66,7 @@ const TransactionLogs = () => {
 
     return(
         <>
-            <button type="button" className="returnButton" onClick={handleReturnHome}>Return</button>
+            <button type="button" className="returnButton" onClick={handleReturnHome}>Home</button>
         
             <Table columns={columns}
                 dataSource={logs}
