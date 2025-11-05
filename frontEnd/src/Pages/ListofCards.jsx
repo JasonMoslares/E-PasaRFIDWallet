@@ -34,7 +34,7 @@ const ListofCards = () => {
                             <div className="cards-inner-container">
                                 {dataSource.filter(card => card.rfidType === type)
                                         .map((card, index) => (
-                                            <Card key={index}>
+                                            <Card key={index} className={`card-${card.rfidType}`}>
                                                 <div className="card-balance">
                                                     <h1>Balance: ₱ {card.cardBalance}</h1>
                                                 </div>
