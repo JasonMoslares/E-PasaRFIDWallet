@@ -54,6 +54,19 @@ function authenticateToken(req, res, next){
     })
 }
 
+// Read All Cards
+app.get('/view/cards', authenticateToken, async (req, res) => {
+    const userId = req.user.userId;
+    
+    try{
+        const enrolledCards = await Card.find({user: userId});
+        return res.json(enrolledCards);
+    }
+    catch (error){
+        return res.status(500).json({Message: "Server error: ", error});
+    }
+})
+
 // Read Single Card
 app.get('/view/:cardNumber', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
@@ -95,24 +108,6 @@ app.get('/view/:cardNumber', authenticateToken, async(req, res) => {
     }
 })
 
-// Read All Cards
-app.get('/view/cards', authenticateToken, async (req, res) => {
-    const userId = req.user.userId;
-    
-    try{
-        const enrolledCards = await Card.find({user: userId});
-        if(enrolledCards.length === 0){
-            return res.status(404).json({Message: "There are no cards enrolled in this account"});
-        }
-        else{
-            return res.json(enrolledCards);
-        }
-    }
-    catch (error){
-        return res.status(500).json({Message: "Server error: ", error});
-    }
-})
-
 // Read Transaction Logs
 app.get('/transactions', authenticateToken, async(req, res) => {
     const userId = req.user.userId;
@@ -131,7 +126,7 @@ app.get('/transactions', authenticateToken, async(req, res) => {
 // Create / Enroll Card
 app.post('/enrollCard', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
-    const {rfidType, cardNumber} = req.body;
+    const {rfidType, cardNumber, nickName} = req.body;
     
     const cardExists = await Card.findOne({cardNumber});
     if(cardExists){
@@ -225,8 +220,10 @@ app.post('/transfer', authenticateToken, async (req, res) => {
         }
 
         else{
-            cardSource.cardBalance -= amount;
-            cardDestination.cardBalance += amount;
+            const amountNum = Number(amount);
+
+            cardSource.cardBalance -= amountNum;
+            cardDestination.cardBalance += amountNum;
 
             await cardSource.save();
             await cardDestination.save();
@@ -237,7 +234,7 @@ app.post('/transfer', authenticateToken, async (req, res) => {
                 sourceCardName: cardSource.nickName,
                 destinationCard: cardDestination.cardNumber,
                 destinationCardName: cardDestination.nickName,
-                amount: amount,
+                amount: amountNum,
                 timestamp: Date.now()
             })
 
@@ -245,7 +242,7 @@ app.post('/transfer', authenticateToken, async (req, res) => {
         }
     }
     catch(error){
-        return res.status(500).json({Message: "Server error: ", error});
+        return res.status(500).json({Message: error.message});
     }
 })
 
