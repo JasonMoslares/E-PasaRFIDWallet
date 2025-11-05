@@ -106,13 +106,48 @@ header{
   margin: 20px;
 }
 
-.balance-card{
-  background-color: #ff7000;
+.balance-card, .card-Beep, .card-EasyTrip, .card-AutoSweep{
   color: white;
+  background-position: center;
   width: 400px;
   border-radius: 12px;
+  -webkit-text-stroke: 1px black;
   text-align: center;
   box-shadow: 0px 6px 20px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-Beep::before, .card-EasyTrip::before, .card-AutoSweep::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.card-Beep > *, .card-EasyTrip > *, .card-AutoSweep > *{
+  position: relative;
+  z-index: 2;
+}
+
+.balance-card{
+  background-color: #ff7000;
+}
+
+.card-Beep{
+  background-image: url('https://i.vimeocdn.com/video/622069147-5c7c944a1828a1fa065785b530e04cc8b917eecbc7a83c391e3402a6d4a5530e-d?f=webp');;
+}
+
+.card-EasyTrip{
+  background-image: url('https://www.noypigeeks.com/wp-content/uploads/2022/05/Easytrip-RFID-NoypiGeeks-1.jpg');
+}
+
+.card-AutoSweep{
+  background-image: url('https://d1hv7ee95zft1i.cloudfront.net/custom/blog-post-photo/gallery/autosweep-logo-5f560d3ed59ee.jpg');
 }
 
 .balance-title h1{
@@ -174,4 +209,32 @@ header{
 
 .icon-tile:hover{
   background-color: orange;
+}
+
+.enrollButton, .cancelButton, .returnButton, .transferButton{
+  width: 120px;
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.enrollButton:active, .cancelButton:active, .returnButton:active, .transferButton:active{
+  transform: scale(0.9);
+}
+
+.enrollButton, .transferButton{
+  background-color: green;
+}
+
+.cancelButton{
+  background-color: red;
+}
+
+.returnButton{
+  margin: 10px;
+  background-color: #ff7000;
 }
