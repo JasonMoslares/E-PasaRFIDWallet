@@ -20,14 +20,37 @@ const EnrollCard = () => {
         navigate('/home');
     }
 
+
+    const getMaxLength = (type) => {
+        if(type === "Beep"){
+            return 16;
+        }
+        else if(type === "EasyTrip"){
+            return 12;
+        }
+        else if(type === "AutoSweep"){
+            return 6;
+        }
+    }
+
     const handleCardNumberChange = (e) => {
         let input = e.target.value.replace(/\D/g, "");          // Replace all non-digits with empty space
+        
+        const max = getMaxLength(values.rfidType);
+        
+        let format = input.slice(0, max);
+        setValues({...values, cardNumber: format})
+    }
 
-        if(values.rfidType === "Beep" || values.rfidType === "EasyTrip"){
-            input = input.replace(/(.{4})/g, "$1 ").trim();     // Group digits into 4 and separate them with a white space
+    const handleKeyInputs = (e) => {
+        const allowed = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab", "Home", "End"];
+
+        if(allowed.includes(e.key)){
+            return;
         }
-
-        setValues({...values, cardNumber: input})
+        else if(!/^\d$/.test(e.key)){
+            e.preventDefault();
+        }
     }
 
     const validateCardNumber =   (_, value) => {
@@ -75,7 +98,11 @@ const EnrollCard = () => {
                                     rules={[{validator: validateCardNumber}]}>
                             <Input placeholder="Enter the Card Number"
                                     value={values.cardNumber}
-                                    onChange={handleCardNumberChange} />
+                                    onChange={handleCardNumberChange}
+                                    onKeyDown={handleKeyInputs}
+                                    inputMode='numeric'
+                                    type='text'
+                                    maxLength={getMaxLength(values.rfidType)} />
                         </Form.Item>
 
                         <Form.Item label='Card NickName'
