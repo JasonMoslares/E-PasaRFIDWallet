@@ -68,7 +68,7 @@ app.get('/view/cards', authenticateToken, async (req, res) => {
 })
 
 // Read Single Card
-app.get('/view/:cardNumber', authenticateToken, async (req, res) => {
+app.get('/card/:cardNumber', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
     const {cardNumber} = req.params;
 
@@ -98,10 +98,10 @@ app.get('/view/:cardNumber', authenticateToken, async(req, res) => {
     const {cardNumber} = req.params;
 
     try{
-        const cardHistory = await Transaction.find({cardNumber})
+        const cardHistory = await Transaction.find({$or: [{sourceCard: cardNumber}, {destinationCard: cardNumber}]})
         .sort({timestamp: -1});
 
-        return res.json(cardHistory);
+        return res.json(res.data);
     }
     catch(error){
         return res.status(500).json({Message: "Server error: ", error});
