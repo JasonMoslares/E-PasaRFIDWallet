@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {Card} from 'antd'
-import { handleReadAll } from "../API";
+import { handleReadAll} from "../API";
 
 const ListofCards = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -35,6 +35,10 @@ const ListofCards = () => {
                                 {dataSource.filter(card => card.rfidType === type)
                                         .map((card, index) => (
                                             <Card key={index} className={`card-${card.rfidType}`}>
+                                                <div className="card-buttons">
+                                                    <button type='button' className="viewCardButton" onClick={() => navigate(`/view/${card.cardNumber}`)}>View</button>
+                                                    <button type='button' className="updateCardButton" onClick={() => navigate(`/updateCard/${card.cardNumber}`)}>Update</button>
+                                                </div>
                                                 <div className="card-balance">
                                                     <h1>Balance: ₱ {card.cardBalance}</h1>
                                                 </div>
