@@ -8,16 +8,16 @@ const UpdateCard = () => {
         nickName: ''
     })
 
-    const {id} = useParams();
+    const {cardNumber} = useParams();
 
     const navigate = useNavigate();
 
     const updateCard = () => {
-        handleUpdateCard(id, values, navigate);
+        handleUpdateCard(cardNumber, values, navigate);
     }
 
     const deleteCard = () => {
-        handleDeleteCard(id, navigate);
+        handleDeleteCard(cardNumber, navigate);
     }
 
     const cancelUpdate = () => {
