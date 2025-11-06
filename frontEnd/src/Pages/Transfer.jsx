@@ -43,8 +43,7 @@ const Transfer = () => {
                         <Form.Item label='Source Card'
                                     name='sourceCard'
                                     rules={[{required: true, message: "Please select the source card"}]}>
-                            <Select showSearch
-                                    placeholder="Select or type a card"
+                            <Select placeholder="Select or type a card"
                                     value={values.sourceCard}
                                     onChange={(value) => setValues({...values, sourceCard: value})}
                                     filterOption={(input, option) =>
@@ -62,8 +61,7 @@ const Transfer = () => {
                         <Form.Item label='Destination Card'
                                     name='destinationCard'
                                     rules={[{required: true, message: "Please select the destination card"}]}>
-                            <Select showSearch
-                                    placeholder="Select or type a card"
+                            <Select placeholder="Select or type a card"
                                     value={values.destinationCard}
                                     onChange={(value) => setValues({...values, destinationCard: value})}
                                     onSearch={(value) => setValues({...values, destinationCard: value})}
@@ -71,10 +69,11 @@ const Transfer = () => {
                                         option?.children.toLowerCase().includes(input.toLowerCase())
                                     }
                                     allowClear>
-                                        {cards.map((card, index) => (
-                                            <Select.Option key={index} value={card.cardNumber}>
-                                                {card.cardNumber} ({card.nickName})
-                                            </Select.Option>
+                                        {cards.filter(card => card.cardNumber !== values.sourceCard)
+                                                .map((card, index) => (
+                                                    <Select.Option key={index} value={card.cardNumber}>
+                                                        {card.cardNumber} ({card.nickName})
+                                                    </Select.Option>
                                         ))}
                             </Select>
                         </Form.Item>
