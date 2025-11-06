@@ -14,19 +14,19 @@ const ViewCard = () => {
     const [logs, setLogs] = useState([]);
 
     const navigate = useNavigate();
-    const {id} = useParams();
+    const {cardNumber} = useParams();
 
     useEffect(() => {
-        handleReadSingleCard(id, setValues);
-        handleCardTransactionLogs(id, setLogs);
+        handleReadSingleCard(cardNumber, setValues);
+        handleCardTransactionLogs(cardNumber, setLogs);
 
         const interval = setInterval(() => {
-            handleReadSingleCard(id, setValues);
-            handleCardTransactionLogs(id, setLogs);
+            handleReadSingleCard(cardNumber, setValues);
+            handleCardTransactionLogs(cardNumber, setLogs);
         }, 2000);
 
         return () => clearInterval(interval);
-    }, [id])
+    }, [cardNumber])
 
     const handleReturnHome = () => {
         navigate('/home');
@@ -69,11 +69,11 @@ const ViewCard = () => {
     return(
         <>
             <button type='button' className='returnButton' onClick={handleReturnHome}>Home</button>
-            <div className="card-container">
-                <Card>
-                    <div className="card-inner-container">
+            <div className="balance-space">
+                <Card className={`card-${value.rfidType}`}>
+                    <div className="cards-inner-container">
                         <div className="card-balance">
-                            <h2>₱ {Number(value.cardBalance).toLocaleString()}</h2>
+                            <h1>Balance: ₱ {value.cardBalance}</h1>
                         </div>
                         <div className="card-info">
                             <h3>{value.cardNumber}</h3>
