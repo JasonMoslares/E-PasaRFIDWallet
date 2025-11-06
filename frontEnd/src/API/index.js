@@ -1,4 +1,3 @@
-import axios from 'axios'
 import api from "./api";
 
 export const handleLogin = (values, nav) => {
@@ -34,7 +33,7 @@ export const handleReadAll = (setVarName) => {
 }
 
 export const handleReadSingleCard = (id, setVarName) => {
-    api.get('http://localhost:5000/view/'+id)
+    api.get('http://localhost:5000/card/'+id)
     .then(res => {console.log(res); setVarName({rfidType: res.data.rfidType, 
                                                 nickName: res.data.nickName, 
                                                 cardNumber: res.data.cardNumber, 
@@ -80,6 +79,6 @@ export const handleTransactionLogs = (setVarName) => {
 
 export const handleCardTransactionLogs = (id, setVarName) => {
     api.get('http://localhost:5000/view/'+id)
-    .then(res => {console.log(res); setVarName(res.data)})
+    .then(res => {console.log(res); setVarName(res.data.logs)})
     .catch(err => {console.log(err)})
 }
