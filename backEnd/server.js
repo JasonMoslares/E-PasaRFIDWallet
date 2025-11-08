@@ -101,7 +101,7 @@ app.get('/view/:cardNumber', authenticateToken, async(req, res) => {
         const cardHistory = await Transaction.find({$or: [{sourceCard: cardNumber}, {destinationCard: cardNumber}]})
         .sort({timestamp: -1});
 
-        return res.json(res.data);
+        return res.json({logs: cardHistory});
     }
     catch(error){
         return res.status(500).json({Message: "Server error: ", error});
