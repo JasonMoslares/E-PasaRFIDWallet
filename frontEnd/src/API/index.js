@@ -1,13 +1,13 @@
 import api from "./api";
 
-export const handleLogin = (values, nav) => {
-    api.post('http://localhost:4000/login', values)
+export const handleLogin = async (values) => {
+    return api.post('http://localhost:4000/login', values)
     .then(res => {console.log(res); 
                 localStorage.setItem('accessToken', res.data.accessToken);
                 localStorage.setItem('refreshToken', res.data.refreshToken);
                 localStorage.setItem('user', JSON.stringify(res.data.user)); 
-                nav('/home')})
-    .catch(err => {console.log(err)})
+                return true;})
+    .catch(err => {console.log(err); return false;})
 }
 
 export const handleRegister = (values, nav) => {
