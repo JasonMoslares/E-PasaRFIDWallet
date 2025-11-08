@@ -11,17 +11,32 @@ const Login = () => {
         password: ''
     })
 
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const [form] = Form.useForm();
+
     const navigate = useNavigate();
 
-    const submitUser = () => {
-        handleLogin(values, navigate)
+    const submitUser = async () => {
+        try{
+            const success = await handleLogin(values);
+            if(success){
+                navigate('/home');
+            }
+            else{
+                setErrorMessage('Invalid email or password');
+            }
+        }
+        catch(error){
+            setErrorMessage('Server error: ', error);
+        }
     }
 
     return(
         <Card>
             <div className="form-container">
                 <div className="login-form-container">
-                    <Form layout='vertical'>
+                    <Form form={form} layout='vertical' onFinish={submitUser}>
                         <div className="login-form-title">
                             <h2>Log In</h2>
                         </div>
@@ -41,7 +56,15 @@ const Login = () => {
                                             onChange={(e) => setValues({...values, password: e.target.value})}/>
                         </Form.Item>
 
-                        <button type='button' className='loginButton' onClick={submitUser}>Log In</button>
+                        {errorMessage && (
+                            <Form.Item>
+                                <div className='error-message'>
+                                    <h4>{errorMessage}</h4>
+                                </div>
+                            </Form.Item>
+                        )}
+
+                        <button type='submit' className='loginButton'>Log In</button>
                     </Form>
                 </div>
             </div>
