@@ -29,7 +29,7 @@ const ViewCard = () => {
     }, [cardNumber])
 
     const handleReturnHome = () => {
-        navigate('/home');
+        navigate('/view/cards');
     }
 
     const columns = [
@@ -68,7 +68,7 @@ const ViewCard = () => {
 
     return(
         <>
-            <button type='button' className='returnButton' onClick={handleReturnHome}>Home</button>
+            <button type='button' className='returnButton' onClick={handleReturnHome}>Return</button>
             <div className="balance-space">
                 <Card className={`card-${value.rfidType}`}>
                     <div className="cards-inner-container">
