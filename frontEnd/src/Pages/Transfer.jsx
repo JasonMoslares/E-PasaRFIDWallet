@@ -21,6 +21,8 @@ const Transfer = () => {
         return () => clearInterval(interval);
     }, [])
 
+    const [form] = Form.useForm();
+
     const navigate = useNavigate();
 
     const cancelTransfer = () => {
@@ -32,11 +34,37 @@ const Transfer = () => {
         navigate('/home');
     }
 
+    const validateAmount = (_, value) => {
+        const selectedSourceCard = cards.find(card => card.cardNumber === values.sourceCard);
+
+        if(!selectedSourceCard){
+            return Promise.reject("Select a source card first");
+        }
+
+        const currentBalance = Number(selectedSourceCard.cardBalance);
+
+        if(value === undefined || value === null || value === ""){
+            return Promise.reject("Please enter an amount");
+        }
+        
+        const numericValue = Number(value);
+
+        if(isNaN(numericValue)){
+            return Promise.reject("Amount must be a number");
+        }
+
+        if(numericValue > currentBalance){
+            return Promise.reject(`Amount cannot exceed source card balance (₱ ${currentBalance})`)
+        }
+
+        return Promise.resolve();
+    }
+
     return(
         <Card>
             <div className="form-container">
                 <div className="transfer-form-container">
-                    <Form layout='vertical'>
+                    <Form form={form} layout='vertical' onFinish={submitTransfer}>
                         <div className="transfer-form-title">
                             <h2>Transfer</h2>
                         </div>
@@ -80,15 +108,13 @@ const Transfer = () => {
 
                         <Form.Item label='Amount'
                                     name='amount'
-                                    rules={[{required: true, message: "Enter an amount"},
-                                            {type: Number, message: "Enter a valid amount"}
-                                    ]}>
+                                    rules={[{validator: validateAmount}]}>
                             <Input placeholder="Enter an amount"
                                     value={values.amount}
                                     onChange={(e) => setValues({...values, amount: e.target.value})} />
                         </Form.Item>
 
-                        <button type='button' className='transferButton' onClick={submitTransfer}>Transfer</button>
+                        <button type='submit' className='transferButton'>Transfer</button>
                         <button type='button' className='cancelButton' onClick={cancelTransfer}>Cancel</button>
                     </Form>
                 </div>
