@@ -10,17 +10,32 @@ const Register = () => {
         password: ''
     });
 
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const [form] = Form.useForm();
+
     const navigate = useNavigate();
 
-    const submitUser = () => {
-        handleRegister(values, navigate);
+    const submitUser = async () => {
+        try{
+            const success = await handleRegister(values);
+            if(success){
+                navigate('/');
+            }
+            else{
+                setErrorMessage('Email already exist!');
+            }
+        }
+        catch(error){
+            setErrorMessage('Server error: ', error);
+        }
     }
 
     return(
         <Card>
             <div className="form-container">
                 <div className="register-form-container">
-                    <Form layout='vertical'>
+                    <Form form={form} layout='vertical' onFinish={submitUser}>
                         <div className="register-form-title">
                             <h2>Register</h2>
                         </div>
@@ -50,7 +65,15 @@ const Register = () => {
                                             onChange={(e) => {setValues({...values, password: e.target.value})}} />
                         </Form.Item>
 
-                        <button type='button' className='registerButton' onClick={submitUser}>Register</button>
+                        {errorMessage && 
+                            <Form.Item>
+                                <div className='error-message'>
+                                    <h4>{errorMessage}</h4>
+                                </div>
+                            </Form.Item>
+                        }
+
+                        <button type='submit' className='registerButton'>Register</button>
                     </Form>
                 </div>
             </div>
