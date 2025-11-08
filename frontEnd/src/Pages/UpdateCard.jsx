@@ -8,6 +8,8 @@ const UpdateCard = () => {
         nickName: ''
     })
 
+    const [form] = Form.useForm();
+
     const {cardNumber} = useParams();
 
     const navigate = useNavigate();
@@ -28,7 +30,7 @@ const UpdateCard = () => {
         <Card>
             <div className="form-container">
                 <div className="update-card-form-container">
-                    <Form layout='vertical'>
+                    <Form form={form} layout='vertical' onFinish={updateCard}>
                         <div className="update-card-form-title">
                             <h2>Update Card Name</h2>
                         </div>
@@ -40,7 +42,7 @@ const UpdateCard = () => {
                                     onChange={(e) => {setValues({...values, nickName: e.target.value})}} />
                         </Form.Item>
 
-                        <button type="button" className="updateButton" onClick={updateCard}>Update</button>
+                        <button type="submit" className="updateButton">Update</button>
                         <button type="button" className="deleteButton" onClick={deleteCard}>Delete</button>
                         <button type="button" className="cancelButton" onClick={cancelUpdate}>Cancel</button>
                     </Form>
