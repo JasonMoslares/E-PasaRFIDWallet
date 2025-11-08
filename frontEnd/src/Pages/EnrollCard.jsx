@@ -10,6 +10,8 @@ const EnrollCard = () => {
         nickName: ''
     })
 
+    const [form] = Form.useForm();
+
     const navigate = useNavigate();
 
     const enrollCard = () => {
@@ -71,13 +73,15 @@ const EnrollCard = () => {
         else if(values.rfidType === 'AutoSweep' && numeric.length !== 6){
             return Promise.reject("Autosweep requires a 6-digit card number")
         }
+
+        return Promise.resolve();
     }
 
     return(
         <Card>
             <div className="form-container">
                 <div className="card-form-container">
-                    <Form layout='vertical'>
+                    <Form form={form} layout='vertical' onFinish={enrollCard}>
                         <div className="card-form-title">
                             <h2>Add a Card</h2>
                         </div>
@@ -113,7 +117,7 @@ const EnrollCard = () => {
                                     onChange={(e) => {setValues({...values, nickName: e.target.value})}} />
                         </Form.Item>
 
-                        <button type="button" className="enrollButton" onClick={enrollCard}>Enroll Card</button>
+                        <button type="submit" className="enrollButton">Enroll Card</button>
                         <button type="button" className="cancelButton" onClick={cancelEnroll}>Cancel</button>
                     </Form>
                 </div>
