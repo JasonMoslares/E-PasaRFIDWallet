@@ -21,7 +21,7 @@ const cardSchema = new mongoose.Schema({
     rfidType: {type: String, enum: ['Beep', 'EasyTrip', 'AutoSweep'], required: true},
     nickName: {type: String, unique: true, required: true},
     cardNumber: {type: String, unique: true, required: true},
-    cardBalance: {type: Number, default: 0}
+    cardBalance: {type: Number, default: 20}
 })
 
 const transactionSchema = new mongoose.Schema({
