@@ -1,7 +1,10 @@
 import api from "./api";
 
+const AUTH_URL = process.env.REACT_APP_API_AUTH_URL || "http://localhost:4000";
+const CARD_URL = process.env.REACT_APP_API_CARD_URL || "http://localhost:5000";
+
 export const handleLogin = async (values) => {
-    return api.post('http://localhost:4000/login', values)
+    return api.post(`${AUTH_URL}/login`, values)
     .then(res => {console.log(res); 
                 localStorage.setItem('accessToken', res.data.accessToken);
                 localStorage.setItem('refreshToken', res.data.refreshToken);
@@ -10,14 +13,14 @@ export const handleLogin = async (values) => {
     .catch(err => {console.log(err); return false;})
 }
 
-export const handleRegister = (values, nav) => {
-    api.post('http://localhost:4000/register', values)
-    .then(res => {console.log(res); nav('/')})
-    .catch(err => {console.log(err)})
+export const handleRegister = async (values) => {
+    return api.post(`${AUTH_URL}/register`, values)
+    .then(res => {console.log(res); return true})
+    .catch(err => {console.log(err); return false})
 }
 
 export const handleLogout = (nav) => {
-    api.delete('http://localhost:4000/logout', {headers: {'x-refresh-token': localStorage.getItem('refreshToken')}})
+    api.delete(`${AUTH_URL}/logout`, {headers: {'x-refresh-token': localStorage.getItem('refreshToken')}})
     .then(res => {console.log(res);
                 localStorage.removeItem('accessToken')
                 localStorage.removeItem('refreshToken')
@@ -27,13 +30,13 @@ export const handleLogout = (nav) => {
 }
 
 export const handleReadAll = (setVarName) => {
-    api.get('http://localhost:5000/view/cards')
+    api.get(`${CARD_URL}/view/cards`)
     .then(res => {console.log(res); setVarName(res.data)})
     .catch(err => {console.log(err)})
 }
 
 export const handleReadSingleCard = (id, setVarName) => {
-    api.get('http://localhost:5000/card/'+id)
+    api.get(`${CARD_URL}/card/`+id)
     .then(res => {console.log(res); setVarName({rfidType: res.data.rfidType, 
                                                 nickName: res.data.nickName, 
                                                 cardNumber: res.data.cardNumber, 
@@ -42,43 +45,43 @@ export const handleReadSingleCard = (id, setVarName) => {
 }
 
 export const handleReadTotalBalance = (setVarName) => {
-    api.get('http://localhost:5000/home')
+    api.get(`${CARD_URL}/home`)
     .then(res => {console.log(res); setVarName(res.data)})
     .catch(err => {console.log(err)})
 }
 
 export const handleEnrollCard = (values, nav) => {
-    api.post('http://localhost:5000/enrollCard', values)
+    api.post(`${CARD_URL}/enrollCard`, values)
     .then(res => {console.log(res); nav('/home')})
     .catch(err => {console.log(err)})
 }
 
 export const handleUpdateCard = (id, values, nav) => {
-    api.put('http://localhost:5000/updateCard/'+id, values)
+    api.put(`${CARD_URL}/updateCard/`+id, values)
     .then(res => {console.log(res); nav('/home')})
     .catch(err => {console.log(err)})
 }
 
 export const handleDeleteCard = (id, nav) => {
-    api.delete('http://localhost:5000/deleteCard/'+id)
+    api.delete(`${CARD_URL}/deleteCard/`+id)
     .then(res => {console.log(res); nav('/home')})
     .catch(err => {console.log(err)})
 }
 
 export const handleTransfer = (values, nav) => {
-    api.post('http://localhost:5000/transfer', values)
+    api.post(`${CARD_URL}/transfer`, values)
     .then(res => {console.log(res); nav('/home')})
     .catch(err => {console.log(err)})
 }
 
 export const handleTransactionLogs = (setVarName) => {
-    api.get('http://localhost:5000/transactions')
+    api.get(`${CARD_URL}/transactions`)
     .then(res => {console.log(res); setVarName(res.data)})
     .catch(err => {console.log(err)})
 }
 
 export const handleCardTransactionLogs = (id, setVarName) => {
-    api.get('http://localhost:5000/view/'+id)
+    api.get(`${CARD_URL}/view/`+id)
     .then(res => {console.log(res); setVarName(res.data.logs)})
     .catch(err => {console.log(err)})
 }
