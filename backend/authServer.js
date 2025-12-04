@@ -12,9 +12,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-const MONGO_URL = process.env.MONGO_URL;
+const username = process.env.MONGO_DB_USERNAME;
+const password = process.env.MONGO_DB_PWD;
 
-mongoose.connect(MONGO_URL)
+const MONGO_URL = `mongodb://${username}:${password}@mongodb:27017/EPasaDB?authSource=admin`;
+
+mongoose.connect(MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
 .then(() => console.log("Database connected successfully"))
 .catch((error) => console.log("DB Connection Error: ", error));
 
