@@ -17,6 +17,8 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_DB_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_DB_PWD}
       ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_DB_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_DB_PWD} 
     restart: unless-stopped
     depends_on:
       - mongodb
@@ -28,13 +30,25 @@ services:
     env_file:
       - ./frontend/.env
 
-  backend:
+  auth-backend:
     build: ./backend
+    container_name: auth-backend
+    command: node authServer.js
     ports:
       - 4000:4000
+    env_file:
+      - ./.env
+    depends_on:
+      - mongodb
+
+  card-backend:
+    build: ./backend
+    container_name: card-backend
+    command: node server.js
+    ports:
       - 5000:5000
     env_file:
-      - ./backend/.env
+      - ./.env
     depends_on:
       - mongodb
 
