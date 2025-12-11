@@ -17,8 +17,8 @@ const EnrollCard = () => {
     const navigate = useNavigate();
 
     const enrollCard = async (values) => {
-        const result = handleEnrollCard(values);
-        if(result.startsWith("Successfully added")){
+        const result = await handleEnrollCard(values);
+        if(result.startsWith("Successfully Enrolled")){
             navigate('/home');
         }
         else{

@@ -152,7 +152,7 @@ app.post('/enrollCard', authenticateToken, async (req, res) => {
             cardNumber: cardNumber
         })
 
-        return res.json({Message: "Card Enrolled Successfully", newCard})
+        return res.json({Message: "Successfully Enrolled", newCard})
     }
 })
 
