@@ -10,12 +10,20 @@ const EnrollCard = () => {
         nickName: ''
     })
 
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [form] = Form.useForm();
 
     const navigate = useNavigate();
 
-    const enrollCard = () => {
-        handleEnrollCard(values, navigate);
+    const enrollCard = async (values) => {
+        const result = handleEnrollCard(values);
+        if(result.startsWith("Successfully added")){
+            navigate('/home');
+        }
+        else{
+            setErrorMessage(result);
+        }
     }
 
     const cancelEnroll = () => {
@@ -116,6 +124,14 @@ const EnrollCard = () => {
                                     value={values.nickName}
                                     onChange={(e) => {setValues({...values, nickName: e.target.value})}} />
                         </Form.Item>
+
+                        {errorMessage && (
+                            <Form.Item>
+                                <div className='error-message'>
+                                    <h4>{errorMessage}</h4>
+                                </div>
+                            </Form.Item>
+                        )}
 
                         <button type="submit" className="enrollButton">Enroll Card</button>
                         <button type="button" className="cancelButton" onClick={cancelEnroll}>Cancel</button>

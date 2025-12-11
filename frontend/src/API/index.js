@@ -50,10 +50,14 @@ export const handleReadTotalBalance = (setVarName) => {
     .catch(err => {console.log(err)})
 }
 
-export const handleEnrollCard = (values, nav) => {
-    api.post(`${CARD_URL}/enrollCard`, values)
-    .then(res => {console.log(res); nav('/home')})
-    .catch(err => {console.log(err)})
+export const handleEnrollCard = (values) => {
+    return api.post(`${CARD_URL}/enrollCard`, values)
+    .then(res => {console.log(res); return res.data.Message;})
+    .catch(err => {console.log(err); 
+                    if(err.response && err.response.data && err.response.data.Message){
+                        return err.response.data.Message;
+                    }
+                    return "Server error";})
 }
 
 export const handleUpdateCard = (id, values, nav) => {

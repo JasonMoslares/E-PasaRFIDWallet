@@ -137,10 +137,10 @@ app.post('/enrollCard', authenticateToken, async (req, res) => {
     const cardExists = await Card.findOne({cardNumber});
     if(cardExists){
         if(cardExists.user.toString() !== userId){
-            return res.json({Message: "Card Already Enrolled on Other User"})
+            return res.status(400).json({Message: "Card Already Enrolled on Other User"})
         }
         else{
-            return res.json({Message: "Card Already Enrolled"})
+            return res.status(400).json({Message: "Card Already Enrolled"})
     
         }
     }
